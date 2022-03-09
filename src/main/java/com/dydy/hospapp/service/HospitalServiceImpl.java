@@ -22,6 +22,11 @@ public class HospitalServiceImpl implements HospitalService{
     }
 
     @Override
+    public List<HospitalResponseDto> ListHospital() {
+        return hospitalRepository.ListHospital();
+    }
+
+    @Override
     public List<String> listBySido() {
         return hospitalRepository.listBySido();
     }

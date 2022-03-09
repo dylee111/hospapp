@@ -33,7 +33,7 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
                         hospital.sidoCdNm
                 ))
                 .from(hospital, hospital)
-                .where(siDoEq(siDo),sgguEq(sggu),hospital.pcrPsblYn.eq("Y"))
+                .where(siDoEq(siDo), sgguEq(sggu), hospital.pcrPsblYn.eq("Y"))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -45,6 +45,22 @@ public class HospitalRepositoryImpl implements HospitalRepositoryCustom {
                 .fetchFirst();
 
         return new PageImpl<>(hospitalList, pageable, countQuery);
+    }
+
+    @Override
+    public List<HospitalResponseDto> ListHospital() {
+        return queryFactory
+                .select(Projections.constructor(HospitalResponseDto.class,
+                        hospital.yadmNm,
+                        hospital.addr,
+                        hospital.telno,
+                        hospital.pcrPsblYn,
+                        hospital.sidoCdNm
+                ))
+                .from(hospital, hospital)
+                .where(hospital.pcrPsblYn.eq("Y"))
+                .fetch()
+                ;
     }
 
     private BooleanExpression siDoEq(String siDo) {

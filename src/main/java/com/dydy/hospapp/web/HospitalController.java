@@ -1,5 +1,6 @@
 package com.dydy.hospapp.web;
 
+import com.dydy.hospapp.dto.ApiReturn;
 import com.dydy.hospapp.dto.HospitalResponseDto;
 import com.dydy.hospapp.dto.paging.PagingDto;
 import com.dydy.hospapp.dto.paging.RequestPageSortDto;
@@ -24,20 +25,36 @@ public class HospitalController {
 
     private final HospitalService hospitalService;
 
-    @GetMapping("/")
-    public String home(RequestPageSortDto pageSortDto, Model model,
+    @GetMapping("")
+    public String index(RequestPageSortDto pageSortDto, Model model,
                        @RequestParam(value = "siDo", required = false) String siDo,
                        @RequestParam(value = "sggu", required = false) String sggu) {
 
-        Pageable pageable = pageSortDto.getPageableSort(Sort.by("hospital_id").ascending());
+        Pageable pageable = pageSortDto.getPageableSort(Sort.by("YADM_NM").ascending());
 
         Page<HospitalResponseDto> hospitalList = hospitalService.hospitalList(pageable, siDo, sggu);
         PagingDto result = new PagingDto(hospitalList);
 
+        // 시, 도 리스트
         model.addAttribute("siDos", hospitalService.listBySido());
+        // 병원 리스트
         model.addAttribute("hospitals", hospitalList);
+        log.info("LIST SIZE={}", hospitalList.getTotalElements());
+        // 페이징 리스트 (페이지수, 이전, 이후)
         model.addAttribute("results", result);
         return "index";
+    }
+
+    @GetMapping("/api/hospital")
+    @ResponseBody
+    public ApiReturn<Page<HospitalResponseDto>> apiHospitalList(RequestPageSortDto pageSortDto,
+                                                                @RequestParam(value = "siDo", required = false) String siDo,
+                                                                @RequestParam(value = "sggu", required = false) String sggu) {
+        Pageable pageable = pageSortDto.getPageableSort(Sort.by("YADM_NM").ascending());
+
+        Page<HospitalResponseDto> hospital = hospitalService.hospitalList(pageable, siDo, sggu);
+
+        return new ApiReturn<>(hospital.getTotalElements(), hospital);
     }
 
     @GetMapping("/api/sggu")

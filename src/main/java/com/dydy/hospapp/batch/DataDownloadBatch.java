@@ -23,7 +23,7 @@ public class DataDownloadBatch {
     private final HospitalRepository hospitalRepository;
 
     // 초 분 시 일 월 주
-    @Scheduled(cron = "0 55 * * * *", zone = "Asia/Seoul") // 매시 정각에 배치하게 설정
+    @Scheduled(cron = "59 * * * * *", zone = "Asia/Seoul") // 매시 정각에 배치하게 설정
     public void startBatch() {
         try {
             // 1. 전체 병원 담을 리스트

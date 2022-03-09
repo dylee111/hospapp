@@ -10,6 +10,8 @@ public interface HospitalService {
 
     Page<HospitalResponseDto> hospitalList(Pageable pageable, String siDo, String sggu);
 
+    List<HospitalResponseDto> ListHospital();
+
     List<String> listBySido();
 
     List<String> ListBySggu(String siDo);
