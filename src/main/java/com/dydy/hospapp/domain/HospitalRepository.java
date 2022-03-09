@@ -8,6 +8,9 @@ import java.util.List;
 
 public interface HospitalRepository extends JpaRepository<Hospital, Long>, HospitalRepositoryCustom {
 
-//    @Query("SELECT h FROM Hospital h WHERE h.sgguCdNm=:sggu AND h.sidoCdNm=:sido ")
-//    List<Hospital> findBySido(@Param("sggu") String sggu, @Param("sido") String sido);
+    @Query("SELECT DISTINCT h.sidoCdNm FROM Hospital h ORDER BY h.sidoCdNm ASC ")
+    List<String> listBySido();
+
+    @Query("SELECT DISTINCT h.sgguCdNm FROM Hospital h WHERE h.sidoCdNm=:siDo ORDER BY h.sgguCdNm ASC ")
+    List<String> ListBySggu(@Param("siDo") String SiDo);
 }

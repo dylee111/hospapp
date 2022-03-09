@@ -28,7 +28,7 @@ public class DataDownloadBatchTest {
         RestTemplate rt = new RestTemplate();
 
         // Service Key는 이미 utf-8로 인코딩된 상태
-        // 하지만 string으로 그대로 받을 경우, 한번 더 인코딩되면서 인식을 못하는 문제가 발생한다.
+        // 하지만 string으로 그대로 받을 경우, 한 번 더 인코딩되면서 인식을 못하는 문제가 발생한다.
         // URI로 인코딩 방지
         URI uri = new URI("http://apis.data.go.kr/B551182/rprtHospService/getRprtHospService?serviceKey=g6cnfXekk4e9IY8m5jIJhLRX99mIrreQ26bq7tgH1%2BFk2FG5iiGpleBNhC5FL5LbQ7knRRHEsnhE0K70opdyPg==&pageNo=1&numOfRows=10&_type=json");
 

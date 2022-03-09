@@ -56,12 +56,19 @@
 </nav>
 <div class="container">
     <h3>PCR 가능 병원 조회 서비스</h3>
-    <select class="form-select form-select-sm mt-3" name="sidoCdNm">
-        <option th:each="sido : ${hospital}" th:value="${sido.siDo}" th:text="${sido.siDo}">1</option>
-    </select>
-    <select class="form-select form-select-sm mt-3">
-        <option>1</option>
-    </select>
+    <!-- 광역시, 도 -->
+    <div>
+        <form>
+            <select id="siDo" class="form-select form-select-sm mt-3" name="sidoCdNm">
+                <option th:each="sido : ${siDos}" th:value="${sido}" th:text="${sido}">1</option>
+            </select>
+            <!-- 시, 군, 구 -->
+            <select id="sggu" class="form-select form-select-sm mt-3">
+            </select>
+            <input type="submit" class="btn btn-success" value="검색">
+        </form>
+    </div>
+    <!-- 병원 리스트 -->
     <div class="container mt-3">
         <table class="table table-bordered">
             <thead>
@@ -73,7 +80,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="hospitals : ${hospital}">
+            <tr th:each="hospitals : ${hospitals}">
                 <td th:text="${hospitals.hospitalName}"></td>
                 <td th:text="${hospitals.pcrYN}"></td>
                 <td th:text="${hospitals.address}"></td>
@@ -84,23 +91,56 @@
     </div>
     <div class="am-pageNo">
         <ul class="am-ul">
-            <li th:if="${result.prev}">
-                <a tabindex="-1" th:href="@{/(page=${result.start -1})}">
-                    &lt;&lt;
+            <li th:if="${results.prev}">
+                <a tabindex="-1" th:href="@{/(page=${results.start -1})}">
+                    &lt;&lt
                 </a>
             </li>
-            <li th:each="page : ${result.pageList}">
+            <li th:each="page : ${results.pageList}">
                 <a th:href="@{/(page=${page})}">
                     [[${page}]]
                 </a>
             </li>
-            <li th:if="${result.next}">
-                <a th:href="@{/(page=${result.end + 1})}">
-                    &gt;&gt;
+            <li th:if="${results.next}">
+                <a th:href="@{/(page=${results.end + 1})}">
+                    &gt;&gt
                 </a>
             </li>
         </ul>
     </div>
 </div>
+<script th:inline="javascript">
+
+    let setSggu = (responseParsing) => {
+        let sgguDom = document.querySelector("#sggu");
+        // Option Element 초기화
+        sgguDom.innerHTML = "";
+        console.log("aaa = " + responseParsing);
+
+        responseParsing.forEach((e) => {
+            // option Element 생성
+            let optionEL = document.createElement("option");
+            optionEL.text = e;
+            sgguDom.append(optionEL);
+        });
+
+        sgguDom.append('<option></option>')
+    };
+
+    let getSggu = async (siDo) => {
+        // 1 옆에 `을 사용하면 변수 바인딩 가능
+        let response = await fetch(`http://localhost:8080/api/sggu?siDo=${siDo}`)
+        let responseParsing = await response.json();
+        console.log(responseParsing);
+        setSggu(responseParsing);
+    }
+
+    let siDoDom = document.querySelector("#siDo");
+    siDoDom.addEventListener('change', (e) => {
+        console.log(e.target.value);
+        let siDo = e.target.value;
+        getSggu(siDo);
+    });
+</script>
 </body>
 </html>

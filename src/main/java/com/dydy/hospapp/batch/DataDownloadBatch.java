@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// 1일 1회 다운로드해서 DB 변경
-// 전날 100개가 있었고 다음날 1개의 데이터가 추가되면
-// 전체 데이터 삭제 후 전체 새로 추가
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -26,7 +23,7 @@ public class DataDownloadBatch {
     private final HospitalRepository hospitalRepository;
 
     // 초 분 시 일 월 주
-    @Scheduled(cron = "0 51 * * * *", zone = "Asia/Seoul") // 매시 정각에 배치하게 설정
+    @Scheduled(cron = "0 55 * * * *", zone = "Asia/Seoul") // 매시 정각에 배치하게 설정
     public void startBatch() {
         try {
             // 1. 전체 병원 담을 리스트

@@ -12,6 +12,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,17 +25,24 @@ public class HospitalController {
     private final HospitalService hospitalService;
 
     @GetMapping("/")
-    public String home(RequestPageSortDto pageSortDto, Model model) {
+    public String home(RequestPageSortDto pageSortDto, Model model,
+                       @RequestParam(value = "siDo", required = false) String siDo,
+                       @RequestParam(value = "sggu", required = false) String sggu) {
 
         Pageable pageable = pageSortDto.getPageableSort(Sort.by("hospital_id").ascending());
 
-        Page<HospitalResponseDto> hospitalList = hospitalService.hospitalList(pageable);
+        Page<HospitalResponseDto> hospitalList = hospitalService.hospitalList(pageable, siDo, sggu);
         PagingDto result = new PagingDto(hospitalList);
 
-        log.info("TOTAL PAGE={}",hospitalList.getTotalPages());
-        log.info("TOTAL>>>>>={}", result.getTotalPage());
-        model.addAttribute("hospital", hospitalList);
-        model.addAttribute("result", result);
+        model.addAttribute("siDos", hospitalService.listBySido());
+        model.addAttribute("hospitals", hospitalList);
+        model.addAttribute("results", result);
         return "index";
+    }
+
+    @GetMapping("/api/sggu")
+    @ResponseBody
+    public List<String> sggu(String siDo) {
+        return hospitalService.ListBySggu(siDo);
     }
 }

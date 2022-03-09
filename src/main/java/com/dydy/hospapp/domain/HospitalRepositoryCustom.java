@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface HospitalRepositoryCustom {
 
-    Page<HospitalResponseDto> findByHospital(Pageable pageable);
+    Page<HospitalResponseDto> findByHospital(Pageable pageable, String siDo, String sggu);
 }
