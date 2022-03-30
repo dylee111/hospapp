@@ -6,6 +6,7 @@ branches:
   only:
     - master
 
+# before_script는 동작 X
 before_install:
     - "chmod +x gradlew"
 
@@ -20,7 +21,7 @@ script:
 before_deploy:
   - zip -r hosp *
   - mkdir -p deploy
-  - mv hops.zip deploy/hosp.zip
+  - mv hosp.zip deploy/hosp.zip
 
 deploy:
   - provider: s3
