@@ -25,7 +25,7 @@ before_deploy:
 
 deploy:
   - provider: s3
-    access_key_id: $AWS_ACCESS_KEY
+    access_key_id: $AWS_ACCESS_KEY # Travis Repo Setting에 설정된 값
     secret_access_key: $AWS_SECRET_KEY
     bucket: hosp-bucket-build
     region: ap-northeast-2
